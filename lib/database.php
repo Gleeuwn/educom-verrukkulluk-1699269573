@@ -1,9 +1,9 @@
 <?php 
 
 // Aanpassen naar je eigen omgeving
-define("USER", "root");
-define("PASSWORD", "root");
-define("DATABASE", "verrukkulluk");
+define("USER", "username");
+define("PASSWORD", "password");
+define("DATABASE", "verrukkullukdatabase");
 define("HOST", "localhost");
 
 class database {
