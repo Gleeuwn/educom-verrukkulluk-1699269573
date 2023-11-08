@@ -17,11 +17,5 @@ class user{
 
         return($user);
     }
-    public function maximumId() {
-        $sql = "SELECT MAX(id) as max_id FROM user";
-        $result = mysqli_query($this->connection, $sql);
-        $row = mysqli_fetch_assoc($result);
-            
-        return $row['max_id'];
-    }
+
 }
