@@ -10,21 +10,35 @@ class gerecht_info {
 
     public function selecteerGerecht_info($gerecht_id){
 
-        $sql = "SELECT * FROM gerecht_info WHERE id = $gerecht_id";
+        $sql = "SELECT * 
+                FROM gerecht_info 
+                WHERE gerecht.id = $gerecht_id";
 
         $result = mysqli_query($this->connection, $sql);
-        $gerecht_info = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-        return($gerecht_info);
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()){
+                echo "alle informatie: " . $row["id, record_type, user_id, datum, numeriekveld, tekstveld"] . "<br>";
+            }
+        }
+        else {
+            echo "0 results";
+          }
     }
 
     public function selectRecordType($recordtype){
 
-        $sql = "SELECT * FROM gerecht_info WHERE record_type = '$recordtype'";
+        $sql = "SELECT * 
+        FROM gerecht_info 
+        WHERE record_type = '$recordtype'";
         $result = mysqli_query($this->connection, $sql);
-        $recordinfo = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-        return($recordinfo);
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()){
+                echo "record_type: " . $row["record_type"] . ", nummeriekveld: " . $row["nummeriekveld"] . ", tekstveld: " .$row["tekstveld"] . ", user: " . $row["user_id"] . "<br>";
+            }
+        }
+        else {
+            echo "0 results";
+          }
     }
 
     public function addFavorite($gerecht_id, $user_id){
