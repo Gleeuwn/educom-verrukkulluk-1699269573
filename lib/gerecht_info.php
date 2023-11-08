@@ -8,9 +8,9 @@ class gerecht_info {
         $this->connection = $connection;
     }
 
-    public function selecteerGerecht_info($gerecht_info_id){
+    public function selecteerGerecht_info($gerecht_id){
 
-        $sql = "SELECT * FROM gerecht_info WHERE id = $gerecht_info_id";
+        $sql = "SELECT * FROM gerecht_info WHERE id = $gerecht_id";
 
         $result = mysqli_query($this->connection, $sql);
         $gerecht_info = mysqli_fetch_array($result, MYSQLI_ASSOC);
