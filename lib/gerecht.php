@@ -6,6 +6,24 @@ class gerecht {
 
     public function __construct($connection){
         $this->connection = $connection;
+        $this->keu = new keuken_type($connection);
+        $this->gei = new gerecht_info($connection);
+        $this->ing = new ingredient($connection);
+    }
+
+    private function selecteerKeuken_type($keuken_type_id) {
+        $data = $this->keu->selecteerKeuken_type($keuken_type_id);
+        return($data);
+    }
+
+    private function selecteerGerecht_info($gerecht_info_id) {
+        $data = $this->gei->selecteerGerecht_info($gerecht_info_id);
+        return($data);
+    }
+
+    private function selecteerIngredient($ingredient_id) {
+        $data = $this->ing->selecteerIngredient($ingredient_id);
+        return($data);
     }
 //basismethode selecteergerecht
     public function selecteerGerecht($id) {

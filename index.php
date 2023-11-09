@@ -25,7 +25,7 @@ $data_user = $usr->selecteerUser(2);
 $data_keuk = $keu->selecteerKeuken_Type(4);
 $data_ingr = $ing->selecteerIngredient(1);
 
-$data_geri = $gei->selecteerGerecht_info(1);
+$data_geri = $gei->selecteerGerecht_info(1,'O');
 /*
 $data_gere = $ger->selecteerGerecht(1);
 $data_calo = $ger->calcCalories(1);

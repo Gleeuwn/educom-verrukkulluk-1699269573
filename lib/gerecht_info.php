@@ -14,16 +14,17 @@ class gerecht_info {
         return($data);
     }
 
-    public function selecteerGerecht_info($gerecht_id){
+    public function selecteerGerecht_info($gerecht_id, $record_type){
 
         $sql = "SELECT * 
                 FROM gerecht_info 
-                WHERE gerecht_id = $gerecht_id";
+                WHERE gerecht_id = $gerecht_id
+                AND record_type = '$record_type'";
 
         $result = mysqli_query($this->connection, $sql);
         $return = [];
             while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                $return[] = [
+                $gerinfoarray = [
                     "id" => $row['id'],
                     "record_type" => $row['record_type'],
                     "gerecht_id" => $row['gerecht_id'],
@@ -35,15 +36,14 @@ class gerecht_info {
                     if ($row['record_type'] === 'O' || $row['record_type'] === 'F') {
                         $user_id = $row['user_id'];
                         $user = $this->selecteerUser($user_id);
-                        $return[] = [
-                            "user_id" => $user_id,
-                            "user_name" => $user['user_name'],
-                            "afbeelding" => $user['afbeelding'],
-                            ];
+                        $gerinfoarray["user_id"] = $user_id;
+                        $gerinfoarray["user_name"] = $user['user_name'];
+                        $gerinfoarray["afbeelding"] = $user['afbeelding'];
                     }
-           
+                    $return[] = $gerinfoarray;
             }
-return $return;
+            return $return;
+  
     }
         
 
