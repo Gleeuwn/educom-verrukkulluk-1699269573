@@ -6,6 +6,12 @@ class gerecht_info {
     
     public function __construct($connection){
         $this->connection = $connection;
+        $this->usr = new user($connection);
+    }
+
+    private function selecteerUser($user_id) {
+        $data = $this->usr->selecteerUser($user_id);
+        return($data);
     }
 
     public function selecteerGerecht_info($gerecht_id){
@@ -15,34 +21,31 @@ class gerecht_info {
                 WHERE gerecht_id = $gerecht_id";
 
         $result = mysqli_query($this->connection, $sql);
-        if ($result->num_rows > 0) {
+        $return = [];
             while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                $return[] = $row;
-            }
-        } else {
-            echo "0 results";
-        }
-    
-        return $return;
-    }
+                $return[] = [
+                    "id" => $row['id'],
+                    "record_type" => $row['record_type'],
+                    "gerecht_id" => $row['gerecht_id'],
+                    "datum" => $row['datum'],
+                    "nummeriekveld" => $row['nummeriekveld'],
+                    "tekstveld" => $row['tekstveld'],
+                    ];
 
-    public function selectRecordType($gerecht_id, $recordtype){
-
-        $sql = "SELECT * 
-                FROM gerecht_info 
-                WHERE gerecht_id = $gerecht_id
-                AND record_type = '$recordtype'";
-        $result = mysqli_query($this->connection, $sql);
-        if ($result->num_rows > 0) {
-            while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                $return[] = $row;
+                    if ($row['record_type'] === 'O' || $row['record_type'] === 'F') {
+                        $user_id = $row['user_id'];
+                        $user = $this->selecteerUser($user_id);
+                        $return[] = [
+                            "user_id" => $user_id,
+                            "user_name" => $user['user_name'],
+                            "afbeelding" => $user['afbeelding'],
+                            ];
+                    }
+           
             }
-        } else {
-            echo "0 results";
-        }
-    
-        return $return;
+return $return;
     }
+        
 
     public function addFavorite($gerecht_id, $user_id){
         $sql = "INSERT INTO gerecht_info (gerecht_id, user_id, record_type) 
