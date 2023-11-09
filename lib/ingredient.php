@@ -6,37 +6,43 @@ class ingredient {
     
     public function __construct($connection){
         $this->connection = $connection;
+        $this->art = new artikel($connection);
+    }
+
+    private function selecteerArtikel($artikel_id) {
+        $data = $this->art->selecteerArtikel($artikel_id);
+        return($data);
     }
 
     public function selecteerIngredient($gerecht_id){
         
     
-        $sql = "SELECT ingredient.id AS ingredient_id, artikel.naam AS ingredient_naam, ingredient.aantal
+        $sql = "SELECT *
                 FROM ingredient
-                INNER JOIN artikel ON ingredient.artikel_id = artikel.id
-                WHERE ingredient.gerecht_id = $gerecht_id";
+                WHERE gerecht_id = $gerecht_id";
         
         $result = mysqli_query($this->connection, $sql);
-    
-        if ($result->num_rows > 0) {
+        $return = [];
             while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-                $return[] = $row;
+                $artikel_id = $row['artikel_id'];
+
+                $artikel = $this->selecteerArtikel($artikel_id);
+
+                $return[] = [
+                "id" => $row['id'],
+                "gerecht_id" => $row['gerecht_id'],
+                "aantal" => $row['aantal'],
+                "calories" => $row['calories'],
+                "artikel_id" => $artikel_id,
+                "naam" => $artikel['naam'],
+                "prijs" => $artikel['prijs'],
+                "verpakking" => $artikel['prijs'],
+                ];
             }
-        } else {
-            echo "0 results";
-        }
+
     
         return $return;
     }
     
-    public function selecteerArtikel($artikel_id) {
 
-        $sql = "select * from artikel where id = $artikel_id";
-        
-        $result = mysqli_query($this->connection, $sql);
-        $artikel = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-        return($artikel);
-
-    }
 }

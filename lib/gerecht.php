@@ -8,11 +8,11 @@ class gerecht {
         $this->connection = $connection;
     }
 //basismethode selecteergerecht
-    public function selecteerGerecht($gerecht_id) {
+    public function selecteerGerecht($id) {
 
         $sql = "SELECT * 
                 FROM gerecht 
-                where id = $gerecht_id";
+                where id = $id";
         
         $result = mysqli_query($this->connection, $sql);
         $gerecht = mysqli_fetch_array($result, MYSQLI_ASSOC);
@@ -42,7 +42,7 @@ class gerecht {
 
         return($ingredient);
     }
-//methode calculeer calorieen
+/*//methode calculeer calorieen
     public function calcCalories($gerecht_id){
         $sql = "SELECT SUM(ingredient.calories) AS total_calories
                 FROM ingredient
@@ -55,18 +55,19 @@ class gerecht {
     }
 //methode calculeer prijs
     public function calcPrijs($gerecht_id){
-        $sql = "SELECT SUM(artikel.prijs) AS totalprijs
+        $sql = "SELECT SUM(ingredient.prijs) AS totalprijs
                 FROM ingredient
-                JOIN artikelen ON ingredient.artikel_id = artikelen.id
+                JOIN artikel ON ingredient.artikel_id = artikel.id
                 WHERE gerecht.id = $gerecht_id";
 
             $result = mysqli_query($this->connection, $sql);
             $prijs = mysqli_fetch_array($result);
 
-            return
+            return $prijs['totalprijs'];
 
 
     }
+/*
 //methode select beoordeling
     public function selectBeoordeling(){
 
@@ -91,4 +92,5 @@ class gerecht {
     public function determineFavoriet(){
 
     }
+*/
 }

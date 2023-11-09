@@ -26,11 +26,12 @@ class gerecht_info {
         return $return;
     }
 
-    public function selectRecordType($recordtype){
+    public function selectRecordType($gerecht_id, $recordtype){
 
         $sql = "SELECT * 
                 FROM gerecht_info 
-                WHERE record_type = '$recordtype'";
+                WHERE gerecht_id = $gerecht_id
+                AND record_type = '$recordtype'";
         $result = mysqli_query($this->connection, $sql);
         if ($result->num_rows > 0) {
             while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
