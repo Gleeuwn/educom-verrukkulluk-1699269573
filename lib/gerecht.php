@@ -11,104 +11,162 @@ class gerecht {
         $this->ing = new ingredient($connection);
     }
 
-    private function selecteerKeuken_type($keuken_type_id) {
-        $data = $this->keu->selecteerKeuken_type($keuken_type_id);
+    private function selecteerKeuken_type($gerecht_id) {
+        $data = $this->keu->selecteerKeuken_type($gerecht_id);
         return($data);
     }
 
-    private function selecteerGerecht_info($gerecht_info_id) {
-        $data = $this->gei->selecteerGerecht_info($gerecht_info_id);
+    private function selecteerGerecht_info($gerecht_id, $record_type) {
+        $data = $this->gei->selecteerGerecht_info($gerecht_id, $record_type);
         return($data);
     }
 
-    private function selecteerIngredient($ingredient_id) {
-        $data = $this->ing->selecteerIngredient($ingredient_id);
+    private function selecteerIngredient($gerecht_id) {
+        $data = $this->ing->selecteerIngredient($gerecht_id);
         return($data);
     }
-//basismethode selecteergerecht
-    public function selecteerGerecht($id) {
+//basismethode ophalen gerecht
+    public function ophalenGerecht($id) {
 
         $sql = "SELECT * 
                 FROM gerecht 
                 where id = $id";
         
         $result = mysqli_query($this->connection, $sql);
-        $gerecht = mysqli_fetch_array($result, MYSQLI_ASSOC);
+        $return = [];
+            while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                $gerecht_id = $row["id"];
+                $keuken_id = $row["keuken_id"];
+                $type_id = $row["type_id"];
 
-        return($gerecht);
+                $ingredient = $this->ing->selecteerIngredient($gerecht_id);
+                
+                $gerecht_info_opmerking = $this->selecteerGerecht_info($gerecht_id, 'O');
+                $gerecht_info_favoriet = $this->selecteerGerecht_info($gerecht_id, 'F');
+                $gerecht_info_waardering = $this->selecteerGerecht_info($gerecht_id, 'W');
+                $gerecht_info_bereidingswijze = $this->selecteerGerecht_info($gerecht_id, 'B');
+                
+                $keuken = $this->selecteerKeuken_type($keuken_id);
+                $type = $this->selecteerKeuken_type($type_id);
+                
+
+                $return[] = [
+                    "id" => $row["id"],
+                    "datum_toegevoegd" => $row["datum_toegevoegd"],
+                    "titel" => $row["titel"],
+                    "korte_omschrijving" => $row["korte_omschrijving"],
+                    "lange_omschrijving" => $row["lange_omschrijving"],
+                    "afbeelding" => $row["afbeelding"],
+                    
+                    //keukentype
+                    "keuken_id" => $keuken,
+                    "type_id" => $type,
+                    /*"keuken_omschrijving" => $keuken["omschrijving"],
+                    "type_omschrijving" => $type["omschrijving"],*/
+
+                    //ingredienten
+                    "ingredient" => $ingredient,
+
+                    //gerecht info enz
+                    "gerecht_info_opmerking" => $gerecht_info_opmerking,
+                    "gerecht_info_favoriet" => $gerecht_info_favoriet,
+                    "gerecht_info_waardering" => $gerecht_info_waardering,
+                    "gerecht_info_bereidingswijze" => $gerecht_info_bereidingswijze,
+                ];
+
+            }
+            return $return;
     }
-//methode selecteeruser
-    public function selecteerUser($user_id) {
 
-        $sql = "SELECT * 
-                FROM user 
-                WHERE id = $user_id";
-        $result = mysqli_query($this->connection, $sql);
-        $user = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-        return($user);
-    }
-//methode selecteeringredient
-    public function selecteerIngredient($ingredient_id){
-
-        $sql = "SELECT * 
-                FROM ingredient 
-                WHERE id = $ingredient_id";
-
-         $result = mysqli_query($this->connection, $sql);
-        $ingredient = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-        return($ingredient);
-    }
-/*//methode calculeer calorieen
+//methode calculeer calorieen
     public function calcCalories($gerecht_id){
-        $sql = "SELECT SUM(ingredient.calories) AS total_calories
-                FROM ingredient
-                WHERE ingredient.gerecht_id = $gerecht_id";
-        
-            $result = mysqli_query($this->connection, $sql);
-            $calories = mysqli_fetch_array($result);
-        
-            return $calories['total_calories'];
+        $total_calories = 0;
+        $ingredients = $this->ing->selecteerIngredient($gerecht_id);
+        foreach ($ingredients as $ingredient) {
+            $calories = $ingredient['calories'];
+            $total_calories += $calories;           
     }
+    return $total_calories;
+}
 //methode calculeer prijs
     public function calcPrijs($gerecht_id){
-        $sql = "SELECT SUM(ingredient.prijs) AS totalprijs
-                FROM ingredient
-                JOIN artikel ON ingredient.artikel_id = artikel.id
-                WHERE gerecht.id = $gerecht_id";
-
-            $result = mysqli_query($this->connection, $sql);
-            $prijs = mysqli_fetch_array($result);
-
-            return $prijs['totalprijs'];
+        $total_prijs = 0;
+            $ingredients = $this->ing->selecteerIngredient($gerecht_id);
+            foreach ($ingredients as $ingredient) {
+            $prijs = $ingredient['prijs'];
+            $total_prijs += $prijs;           
+    }
+    return $total_prijs;
 
 
     }
-/*
+
 //methode select beoordeling
-    public function selectBeoordeling(){
+    public function SelecteerBeoordeling($gerecht_id){
+    $totalbeoordeling = 0;
+    $totalReviews = 0;
 
+    $beoordelingen = $this->selecteerGerecht_info($gerecht_id, 'W');
+
+    foreach ($beoordelingen as $beoordeling) {
+        $totalbeoordeling += $beoordeling['nummeriekveld']; 
+        $totalReviews++;
     }
-//methode select bereidingswijze
-    public function selectBereidingswijze(){
 
+    if ($totalReviews > 0) {
+        $averagebeoordeling = $totalbeoordeling / $totalReviews;
+        return $averagebeoordeling;
+    } else {
+        return 0;
+    }
+}
+
+//methode select bereidingswijze
+    public function selecteerBereidingswijze($gerecht_id){
+        $bereidingswijze = $this->selecteerGerecht_info($gerecht_id, 'B');
+        return $bereidingswijze;
     }
 //methode select opmerkingen
-    public function selectOpmerkingen(){
+    public function selecteerOpmerkingen($gerecht_id){
+        $opmerking = $this->selecteerGerecht_info($gerecht_id, 'O');
+        return $opmerking;
 
     }
 //methode select keuken
-    public function selectKeuken(){
+    public function selecteerKeuken($id){
+        $sql = "SELECT keuken_id 
+                FROM gerecht 
+                where id = $id";
 
-    }
-//methode select type
-    public function selectType(){
+        $result = mysqli_query($this->connection, $sql);
+        $keuken = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
+        return($keuken);
     }
+//methode select keuken
+    public function selecteerType($id){
+    $sql = "SELECT type_id 
+            FROM gerecht 
+            where id = $id";
+
+    $result = mysqli_query($this->connection, $sql);
+    $type = mysqli_fetch_array($result, MYSQLI_ASSOC);
+
+    return($type);
+}
 //methode determine favorite
-    public function determineFavoriet(){
+    public function determineFavorite($gerecht_id, $user_id) {
+        $favoriteRecords = $this->selecteerGerecht_info($gerecht_id, 'F');
 
+    foreach ($favoriteRecords as $record) {
+        if ($record['user_id'] === $user_id) {
+            return true; // Gevonden als favoriet, maar het werkt nog niet 
+        }
+        else {
+            return false; // Niet gevonden als favoriet
+        }
     }
-*/
+    
+}
+
 }
