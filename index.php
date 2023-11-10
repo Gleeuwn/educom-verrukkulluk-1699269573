@@ -7,6 +7,7 @@ require_once("lib/keuken_type.php");
 require_once("lib/ingredient.php");
 require_once("lib/gerecht_info.php");
 require_once("lib/gerecht.php");
+require_once("lib/boodschappen.php");
 
 /// INIT
 $db = new database();
@@ -16,6 +17,7 @@ $keu = new keuken_type($db->getConnection());
 $ing = new ingredient($db->getConnection());
 $gei = new gerecht_info($db->getConnection());
 $ger = new gerecht($db->getConnection());
+$boo = new boodschappen($db->getConnection());
 
 
 
@@ -29,6 +31,9 @@ $data_geri = $gei->selecteerGerecht_info(1,'O');
 
 $data_gere = $ger->ophalenGerecht(1);
 
+$data_prij = $boo->berekenTotaalPrijs(1);
+//$data_bood = $boo->voegArtikelToe(1,1);
+
 
 
 
@@ -37,5 +42,6 @@ var_dump($data_geri);
 echo "<br><br><br>";
 var_dump($data_gere);
 echo "<br><br><br>";
+var_dump($data_prij);
 
 
