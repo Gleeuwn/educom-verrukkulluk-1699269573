@@ -28,14 +28,7 @@ $data_ingr = $ing->selecteerIngredient(1);
 $data_geri = $gei->selecteerGerecht_info(1,'O');
 
 $data_gere = $ger->ophalenGerecht(1);
-$data_calo = $ger->calcCalories(1);
-$data_prij = $ger->calcPrijs(1);
-$data_beoo = $ger->selecteerBeoordeling(1);
-$data_bere = $ger->selecteerBereidingswijze(1);
-$data_opme = $ger->selecteerOpmerkingen(1);
-$data_keuk = $ger->selecteerKeuken(1);
-$data_type = $ger->selecteerType(1);
-$data_detf = $ger->determineFavorite(1,1);
+
 
 
 
@@ -44,19 +37,5 @@ var_dump($data_geri);
 echo "<br><br><br>";
 var_dump($data_gere);
 echo "<br><br><br>";
-var_dump($data_calo);
-echo "<br><br><br>";
-var_dump($data_prij);
-echo "<br><br><br>";
-var_dump($data_beoo);
-echo "<br><br><br>";
-var_dump($data_bere);
-echo "<br><br><br>";
-var_dump($data_opme);
-echo "<br><br><br>";
-var_dump($data_detf);
-echo "<br><br><br>";
-var_dump($data_keuk);
-echo "<br><br><br>";
-var_dump($data_type);
+
 

@@ -9,6 +9,7 @@ class gerecht {
         $this->keu = new keuken_type($connection);
         $this->gei = new gerecht_info($connection);
         $this->ing = new ingredient($connection);
+        $this->usr = new user($connection);
     }
 
     private function selecteerKeuken_type($gerecht_id) {
@@ -25,6 +26,10 @@ class gerecht {
         $data = $this->ing->selecteerIngredient($gerecht_id);
         return($data);
     }
+    private function selecteerUser($user_id) {
+        $data = $this->ing->selecteerUser($user_id);
+        return($data);
+    }
 //basismethode ophalen gerecht
     public function ophalenGerecht($id) {
 
@@ -38,6 +43,7 @@ class gerecht {
                 $gerecht_id = $row["id"];
                 $keuken_id = $row["keuken_id"];
                 $type_id = $row["type_id"];
+                $user_id = $row["user_id"];
 
                 $ingredient = $this->ing->selecteerIngredient($gerecht_id);
                 
@@ -48,6 +54,11 @@ class gerecht {
                 
                 $keuken = $this->selecteerKeuken_type($keuken_id);
                 $type = $this->selecteerKeuken_type($type_id);
+
+                $calories = $this->calcCalories($gerecht_id);
+                $prijs = $this->calcPrijs($gerecht_id);
+                $beoordeling = $this->selecteerBeoordeling($gerecht_id);
+                $determineFavorite = $this->determineFavorite($gerecht_id, $user_id);
                 
 
                 $return[] = [
@@ -57,29 +68,28 @@ class gerecht {
                     "korte_omschrijving" => $row["korte_omschrijving"],
                     "lange_omschrijving" => $row["lange_omschrijving"],
                     "afbeelding" => $row["afbeelding"],
-                    
                     //keukentype
                     "keuken_id" => $keuken,
                     "type_id" => $type,
-                    /*"keuken_omschrijving" => $keuken["omschrijving"],
-                    "type_omschrijving" => $type["omschrijving"],*/
-
                     //ingredienten
                     "ingredient" => $ingredient,
-
                     //gerecht info enz
                     "gerecht_info_opmerking" => $gerecht_info_opmerking,
                     "gerecht_info_favoriet" => $gerecht_info_favoriet,
                     "gerecht_info_waardering" => $gerecht_info_waardering,
                     "gerecht_info_bereidingswijze" => $gerecht_info_bereidingswijze,
+                    "calorieën" => $calories,
+                    "prijs" => $prijs,
+                    "beoordeling" => $beoordeling,
+                    "determinefavorite" => $determineFavorite
                 ];
 
             }
             return $return;
     }
 
-//methode calculeer calorieen. Het lukt me niet om het werkend te krijgen zonder een connectie te maken met selecteerIngredient
-    public function calcCalories($gerecht_id){
+//methode calculeer calorieen.
+    private function calcCalories($gerecht_id){
         $total_calories = 0;
         $ingredients = $this->ing->selecteerIngredient($gerecht_id);
         foreach ($ingredients as $ingredient) {
@@ -89,7 +99,7 @@ class gerecht {
     return $total_calories;
 }
 //methode calculeer prijs
-    public function calcPrijs($gerecht_id){
+        private function calcPrijs($gerecht_id){
         $total_prijs = 0;
             $ingredients = $this->ing->selecteerIngredient($gerecht_id);
             foreach ($ingredients as $ingredient) {
@@ -102,7 +112,7 @@ class gerecht {
     }
 
 //methode select beoordeling
-    public function SelecteerBeoordeling($gerecht_id){
+    private function selecteerBeoordeling($gerecht_id){
     $totalbeoordeling = 0;
     $totalReviews = 0;
 
@@ -120,7 +130,7 @@ class gerecht {
         return 0;
     }
 }
-
+/* onderstaande methodes staan al opgenomen in ophalenGerecht dus volgens mij hoef ik die niet nog eens te op te halen.
 //methode select bereidingswijze
     public function selecteerBereidingswijze($gerecht_id){
         $bereidingswijze = $this->selecteerGerecht_info($gerecht_id, 'B');
@@ -154,8 +164,9 @@ class gerecht {
 
     return($type);
 }
+*/
 //methode determine favorite
-    public function determineFavorite($gerecht_id, $user_id) {
+    private function determineFavorite($gerecht_id, $user_id) {
         $favoriteRecords = $this->selecteerGerecht_info($gerecht_id, 'F');
         if ($favoriteRecords != null) {}
         foreach ($favoriteRecords as $record) {
