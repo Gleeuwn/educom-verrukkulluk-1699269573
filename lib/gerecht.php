@@ -78,7 +78,7 @@ class gerecht {
             return $return;
     }
 
-//methode calculeer calorieen
+//methode calculeer calorieen. Het lukt me niet om het werkend te krijgen zonder een connectie te maken met selecteerIngredient
     public function calcCalories($gerecht_id){
         $total_calories = 0;
         $ingredients = $this->ing->selecteerIngredient($gerecht_id);
@@ -157,16 +157,14 @@ class gerecht {
 //methode determine favorite
     public function determineFavorite($gerecht_id, $user_id) {
         $favoriteRecords = $this->selecteerGerecht_info($gerecht_id, 'F');
+        if ($favoriteRecords != null) {}
+        foreach ($favoriteRecords as $record) {
+        $favorieten[] = [
+            "user_id" => $record["user_id"]
+        ];
 
-    foreach ($favoriteRecords as $record) {
-        if ($record['user_id'] === $user_id) {
-            return true; // Gevonden als favoriet, maar het werkt nog niet 
-        }
-        else {
-            return false; // Niet gevonden als favoriet
-        }
     }
-    
+    return ($favorieten);
 }
 
 }
