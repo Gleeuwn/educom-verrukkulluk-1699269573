@@ -55,10 +55,10 @@ class gerecht {
                 $keuken = $this->selecteerKeuken_type($keuken_id);
                 $type = $this->selecteerKeuken_type($type_id);
 
-                $calories = $this->calcCalories($gerecht_id);
-                $prijs = $this->calcPrijs($gerecht_id);
-                $beoordeling = $this->selecteerBeoordeling($gerecht_id);
-                $determineFavorite = $this->determineFavorite($gerecht_id, $user_id);
+                $calories = $this->calcCalories($ingredient);
+                $prijs = $this->calcPrijs($ingredient);
+                $beoordeling = $this->selecteerBeoordeling($gerecht_info_waardering);
+                $determineFavorite = $this->determineFavorite($gerecht_info_favoriet);
                 
 
                 $return[] = [
@@ -89,21 +89,19 @@ class gerecht {
     }
 
 //methode calculeer calorieen.
-    private function calcCalories($gerecht_id){
+    private function calcCalories($calories){
         $total_calories = 0;
-        $ingredients = $this->ing->selecteerIngredient($gerecht_id);
-        foreach ($ingredients as $ingredient) {
-            $calories = $ingredient['calories'];
+        foreach ($calories as $calorie_ingredient) {
+            $calories = $calorie_ingredient['calories'];
             $total_calories += $calories;           
     }
     return $total_calories;
 }
 //methode calculeer prijs
-        private function calcPrijs($gerecht_id){
+        private function calcPrijs($prijs){
         $total_prijs = 0;
-            $ingredients = $this->ing->selecteerIngredient($gerecht_id);
-            foreach ($ingredients as $ingredient) {
-            $prijs = $ingredient['prijs'];
+            foreach ($prijs as $prijs_ingredient) {
+            $prijs = $prijs_ingredient['prijs'];
             $total_prijs += $prijs;           
     }
     return $total_prijs;
@@ -112,23 +110,16 @@ class gerecht {
     }
 
 //methode select beoordeling
-    private function selecteerBeoordeling($gerecht_id){
+    private function selecteerBeoordeling($beoordeling){
     $totalbeoordeling = 0;
-    $totalReviews = 0;
 
-    $beoordelingen = $this->selecteerGerecht_info($gerecht_id, 'W');
+    $totalbeoordeling = count($beoordeling);
+    if($totalbeoordeling >= 0) return 0;
 
-    foreach ($beoordelingen as $beoordeling) {
-        $totalbeoordeling += $beoordeling['nummeriekveld']; 
-        $totalReviews++;
+    foreach ($beoordeling as $beoordelingen) {
+        $totalbeoordeling += $beoordelingen['nummeriekveld']; 
     }
 
-    if ($totalReviews > 0) {
-        $averagebeoordeling = $totalbeoordeling / $totalReviews;
-        return $averagebeoordeling;
-    } else {
-        return 0;
-    }
 }
 /* onderstaande methodes staan al opgenomen in ophalenGerecht dus volgens mij hoef ik die niet nog eens te op te halen.
 //methode select bereidingswijze
@@ -166,10 +157,9 @@ class gerecht {
 }
 */
 //methode determine favorite
-    private function determineFavorite($gerecht_id, $user_id) {
-        $favoriteRecords = $this->selecteerGerecht_info($gerecht_id, 'F');
-        if ($favoriteRecords != null) {}
-        foreach ($favoriteRecords as $record) {
+    private function determineFavorite($gerecht_info_favoriet) {
+        if ($gerecht_info_favoriet != null) return 0;
+        foreach ($gerecht_info_favoriet as $record) {
         $favorieten[] = [
             "user_id" => $record["user_id"]
         ];
