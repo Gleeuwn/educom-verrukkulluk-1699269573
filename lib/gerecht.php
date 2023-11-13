@@ -34,9 +34,11 @@ class gerecht {
     public function ophalenGerecht($id) {
 
         $sql = "SELECT * 
-                FROM gerecht 
-                where id = $id";
-        
+                FROM gerecht";
+                if($id  != null) {
+        $sql .= " WHERE id = $id";
+    }
+ 
         $result = mysqli_query($this->connection, $sql);
         $return = [];
             while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
@@ -121,42 +123,7 @@ class gerecht {
     }
 
 }
-/* onderstaande methodes staan al opgenomen in ophalenGerecht dus volgens mij hoef ik die niet nog eens te op te halen.
-//methode select bereidingswijze
-    public function selecteerBereidingswijze($gerecht_id){
-        $bereidingswijze = $this->selecteerGerecht_info($gerecht_id, 'B');
-        return $bereidingswijze;
-    }
-//methode select opmerkingen
-    public function selecteerOpmerkingen($gerecht_id){
-        $opmerking = $this->selecteerGerecht_info($gerecht_id, 'O');
-        return $opmerking;
 
-    }
-//methode select keuken
-    public function selecteerKeuken($id){
-        $sql = "SELECT keuken_id 
-                FROM gerecht 
-                where id = $id";
-
-        $result = mysqli_query($this->connection, $sql);
-        $keuken = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-        return($keuken);
-    }
-//methode select keuken
-    public function selecteerType($id){
-    $sql = "SELECT type_id 
-            FROM gerecht 
-            where id = $id";
-
-    $result = mysqli_query($this->connection, $sql);
-    $type = mysqli_fetch_array($result, MYSQLI_ASSOC);
-
-    return($type);
-}
-*/
-//methode determine favorite
     private function determineFavorite($gerecht_info_favoriet) {
         if ($gerecht_info_favoriet != null) return 0;
         foreach ($gerecht_info_favoriet as $record) {
