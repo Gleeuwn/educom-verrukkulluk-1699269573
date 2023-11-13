@@ -48,6 +48,7 @@ class gerecht_info {
         
 
     public function addFavorite($gerecht_id, $user_id){
+        $this -> deleteFavorite($gerecht_id, $user_id);
         $sql = "INSERT INTO gerecht_info (gerecht_id, user_id, record_type) 
                 VALUES ($gerecht_id, $user_id, 'F')";
         $result = mysqli_query($this->connection, $sql);

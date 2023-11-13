@@ -45,7 +45,7 @@ class gerecht {
                 $type_id = $row["type_id"];
                 $user_id = $row["user_id"];
 
-                $ingredient = $this->ing->selecteerIngredient($gerecht_id);
+                $ingredient = $this->selecteerIngredient($gerecht_id);
                 
                 $gerecht_info_opmerking = $this->selecteerGerecht_info($gerecht_id, 'O');
                 $gerecht_info_favoriet = $this->selecteerGerecht_info($gerecht_id, 'F');
