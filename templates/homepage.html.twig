@@ -1,8 +1,28 @@
 {# Opnemen van de "Main" file #}
 {% extends "main.html.twig" %}
 
+
 {% block header %}
 <img src="assets/img/logo-v2.png"/>
+
+
+    <div class="menu">
+        <div class="menu-trigger"> <i class="fas fa-bars";></i>
+            <div class="dropdown">
+                
+                    <img src="assets/img/verrukkulluk-logo-v2.png"/>
+                    <h2>
+                    <a href=""><span class="menulinks">Mijn favorieten</span></a> 
+                    <a href=""><span class="menulinks">Mijn boodschappenlijst</span></a>
+                    
+                    </h2>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
 {% endblock %}
 
 
@@ -10,39 +30,57 @@
 {% block content %}
     {# Dit is commentaar #}
 
-    {# Print #}
-    <h1>Heading #1</h1>
-    <h2>Heading #2</h2>
-    <h3>Heading #3 t/m 5</h3>
+{# Loop #} 
 
-    <h4>Dit is de template {{  title }}</h4>
 
-{# Loop #}
-    <ul>
     {% for record in data %}
-        <li>
-            <img src="{{ record.foto }}" style="width: 100px; heigfht: 100px;">
-
-            {{ record.title }}
+        
+        {%  if record.id is odd %}
+            <div class="row">
+        {%  endif  %}
+        
+            <div class="col-md-6">
+            <section class="content">
+            
+            <img src="{{ record.afbeelding }}" style="width: 100%; height: 200px;">
+            <div class="a">
+            <h2><span style='color: #6e8722'>  {{ record.titel }}</span></h2>
+            <span> {{record.beoordeling}} </span>
+            <span class="star" data-id="{{ record.gerecht.id }}" data-value="1"><i class="far fa-star"></i></span>
+            <span class="star" data-id="{{ record.gerecht.id }}" data-value="2"><i class="far fa-star"></i></span>
+            <span class="star" data-id="{{ record.gerecht.id }}" data-value="3"><i class="far fa-star"></i></span>
+            <span class="star" data-id="{{ record.gerecht.id }}" data-value="4"><i class="far fa-star"></i></span>
+            <span class="star" data-id="{{ record.gerecht.id }}" data-value="5"><i class="far fa-star"></i></span>
+            {{record.korte_omschrijving}}
+            </div>
             {# sub-loop #}
             <ul>
-                {% for ingr in record.ingredienten %}
-                    <li>
-                        <span {% if ingr.id < 2 %}style='color: #F00'{% endif %}>{{  ingr.naam }}</span>
-
-                        {# if #}
-                        {%  if ingr.id == 3 %}
-                            <strong>Dit is ID 3!</strong>
-                        {%  endif  %}
-                    </li>
+                {% for ingr in record.ingredient %}
                 {% endfor %}
             </ul>
-        </li>
+            
+            
+            <a href="http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id={{record.id}}&action=detail"><ul class="buttoncontainer"><h3>Smullen!</h3> </ul></a>
+            <span class="b">
+            <i class="fas fa-user-friends" style="color: #dc3439;"></i> 4 
+            <i class="fas fa-euro-sign" style="color: #dc3439;"></i> {{record.prijs}}
+            <i class="fas fa-fire" style="color: #dc3439;"></i> {{record.calories}} 
+            </span>
+            </section>
+            </div>
+            
+            {%  if record.id is even %}
+            </div>
+            <BR><BR>  
+            {%  endif  %} 
+            
     {% endfor %}
-    <ul>
+
+
+    
      {# Dump #}
-       <pre>
+       {#<pre>
         {{ dump(data) }}
-       </pre>
+       </pre>#}
 
 {% endblock %}

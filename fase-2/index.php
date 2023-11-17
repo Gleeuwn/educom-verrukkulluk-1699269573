@@ -16,6 +16,7 @@ $twig->addExtension(new \Twig\Extension\DebugExtension());
 /// Next step, iets met je data doen. Ophalen of zo
 require_once("lib/gerecht.php");
 $gerecht = new gerecht();
+
 $data = $gerecht->selecteerGerecht();
 
 

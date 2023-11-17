@@ -31,7 +31,7 @@ class gerecht {
         return($data);
     }
 //basismethode ophalen gerecht
-    public function ophalenGerecht($id) {
+    public function ophalenGerecht($id = null) {
 
         $sql = "SELECT * 
                 FROM gerecht";
@@ -80,7 +80,7 @@ class gerecht {
                     "gerecht_info_favoriet" => $gerecht_info_favoriet,
                     "gerecht_info_waardering" => $gerecht_info_waardering,
                     "gerecht_info_bereidingswijze" => $gerecht_info_bereidingswijze,
-                    "calorieën" => $calories,
+                    "calories" => $calories,
                     "prijs" => $prijs,
                     "beoordeling" => $beoordeling,
                     "determinefavorite" => $determineFavorite
@@ -106,22 +106,22 @@ class gerecht {
             $prijs = $prijs_ingredient['prijs'];
             $total_prijs += $prijs;           
     }
-    return $total_prijs;
+    return ROUND ($total_prijs, 2);
 
 
     }
 
 //methode select beoordeling
     private function selecteerBeoordeling($beoordeling){
-    $totalbeoordeling = 0;
-
-    $totalbeoordeling = count($beoordeling);
-    if($totalbeoordeling >= 0) return 0;
-
+    
+    if($beoordeling != null) {
+        $totalbeoordeling = 0;
     foreach ($beoordeling as $beoordelingen) {
-        $totalbeoordeling += $beoordelingen['nummeriekveld']; 
-    }
+        $totalbeoordeling += $beoordelingen['nummeriekveld'];
 
+        }
+        return ($totalbeoordeling / count($beoordeling));
+    }
 }
 
     private function determineFavorite($gerecht_info_favoriet) {
@@ -130,9 +130,9 @@ class gerecht {
         $favorieten[] = [
             "user_id" => $record["user_id"]
         ];
-
+        return ($favorieten);
     }
-    return ($favorieten);
+    
 }
 
 }

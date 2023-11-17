@@ -12,7 +12,75 @@
 
     <script type="text/javascript" language="javascript" src="assets/jquery/jquery-3.5.1.js"></script>
     <script type="text/javascript" language="javascript" src="assets/bootstrap/js/bootstrap.js"></script>
+<script>
+        let gegeven_waardering = -1;
 
+        $(document).ready(function() {
+            resetStarColors();
+
+            $('.fa-star').on('click', function () {
+                const gegeven_waardering = parseInt($(this).data('index') + 1);
+                const gerecht_id = $(this).closest('.rating').data('id'); 
+                const url = `index.php?gerecht_id=${ gerecht_id }&action=waardering&aantal=${ gegeven_waardering }`;
+				console.log(url);
+                console.log('Clicked on star. gerecht_id:', gerecht_id, 'gegeven_waardering:', gegeven_waardering);
+				$.ajax({
+   					url: url,
+					method: "GET",
+					success: function(result) {}
+				})	
+            })
+
+            $('.fa-star').mouseover(function() {
+                resetStarColors();
+
+                var huidige_waardering = parseInt($(this).data('index'));
+
+                for (var i = 0; i <= huidige_waardering; i++)
+                    $('.fa-star:eq(' +i+ ')').css('color', '#fdaf08');
+            });
+
+            $('.fa-star').mouseleave(function() {
+
+                if (gegeven_waardering != -1) {
+                    for (var i = 0; i <= gegeven_waardering; i++)
+                        $('.fa-star:eq(' +i+ ')').css('color', '#fdaf08')
+					}
+				
+            })
+            
+        });
+
+        function resetStarColors() {
+            $('.fa-star').css('color', 'gray');
+        }
+    </script>
+
+    <script>
+    jQuery(document).ready(function() {
+	jQuery('.tabs .tab-links a').on('click', function(e) {
+		var currentAttrValue = jQuery(this).attr('href');
+
+		jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+		jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+
+		e.preventDefault();
+	});
+    });
+    </script>
+
+    <style>
+            div.a {
+                text-align: left;
+                padding-left: 20px;
+                display: inline-block;
+                }
+            div.b {
+                text-align: right;
+                padding-right: 20px
+                display: inline-block;
+                }
+    </style>
 </html>
 <body>
 <div class="container-fluid">
@@ -27,25 +95,50 @@
 
     <div class="row">
         <div class="col-md-3">
-            <h2>Agenda</h2>
-            <i class="fa fa-calendar"></i> FontAwesome <a href="https://fontawesome.com/icons?d=gallery&m=free">Documentation</a><br>
-            <i class="fa fa-file-pdf"></i><a href="https://www.layoutit.com/build">Layout-it</a>
-
+            <section class="agenda">
+            <h2 style='color: #fff'>Agenda</h2>
+            <h2><i class="fa fa-calendar" style="color: #fff;" ></i> 
+            <i class="fa-solid fa-people-group" style="color: #dc3439;"></i>
+             Vegetarisch koken </h2>
+            Workshop vegetarisch koken
+            {#FontAwesome <a href="https://fontawesome.com/icons?d=gallery&m=free">Documentation</a><br>
+            <i class="fa fa-file-pdf"></i><a href="https://www.layoutit.com/build">Layout-it</a> #}
+            </section>
+    <div class="row">
+    <div class="col-md-12">
+    <section class="login">
+            <h2 style='color: #fff'>Login</h2>
+        </section>
+    </div>
+    </div>
 
         </div>
         <div class="col-md-9">
-            <h2>Content</h2>
             {%  block content %}
             {%  endblock %}
         </div>
     </div>
 
 
+{#footer#}
+<footer class="footer">
     <div class="row">
-        <div class="col-md-12">
-            <h1>Footer</h1>
+        <div class="col-md-1">
+                 
+                        <img src="assets/img/verrukkulluk-pay-off.png" style="width: 100px; height: 100px;"/>
+        </div>
+            <div class="col-md-11">
+                        <img src="assets/img/verrukkulluk-contact.png" style="width: 200px; height: 100px;"/>
+                 <br>verukkulluk.nl
+                 <br>Poststraat 2b
+                 <br>Sittard
+                 <br>info@verrukkulluk.nl
+                    </div>
+                 
+            </div>
         </div>
     </div>
+</footer>
 
 
 </div>

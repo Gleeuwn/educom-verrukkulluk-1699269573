@@ -36,7 +36,8 @@ class ingredient {
                 "artikel_id" => $artikel_id,
                 "naam" => $artikel['naam'],
                 "prijs" => $artikel['prijs'],
-                "verpakking" => $artikel['prijs'],
+                "verpakking" => $artikel['verpakking'],
+                "omschrijving" => $artikel['omschrijving']
                 ];
             }
 

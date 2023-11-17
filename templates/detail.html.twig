@@ -1,5 +1,109 @@
 {% extends "main.html.twig" %}
 
 {% block header %}
-<h1>Hallo Bram</h1>
+<img src="assets/img/logo-v2.png"/>
+
+
+    <div class="menu">
+        <div class="menu-trigger"> <i class="fas fa-bars";></i>
+            <div class="dropdown">
+                
+                    <img src="assets/img/verrukkulluk-logo-v2.png"/>
+                    <h2>
+                    <a href=""><span class="menulinks">Mijn favorieten</span></a> 
+                    <a href=""><span class="menulinks">Mijn boodschappenlijst</span></a>
+                    
+                    </h2>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+{% endblock %}
+
+{% block content %}
+{% for record in data %}
+<div class="row">
+<div class="col-md-12">
+<section class="content">
+<img src="{{ record.afbeelding }}" style="width: 300px; height: 100%; margin-right: 20px; float: left;">
+<h2>{{record.titel}}</h2>
+<h3 style="display: inline"; color="#95b82d";> Keuken: </h3>{{record.keuken_id.omschrijving}} <h3 style="display: inline"; color="#95b82d";>Type: </h3> {{record.type_id.omschrijving}}
+<BR>{{record.lange_omschrijving}}
+<BR>
+<span class="b">
+            <i class="fas fa-user-friends" style="color: #dc3439;"></i> 4 
+            <i class="fas fa-euro-sign" style="color: #dc3439;"></i> {{record.prijs}}
+            <i class="fas fa-fire" style="color: #dc3439;"></i> {{record.calories}} 
+            </span>
+            <i class="far fa-heart"></i>
+            <BR>
+            <div class="rating" data-id="{{ record.id }}">
+            <i class="fa fa-star fa-2x" data-index="0"></i>
+            <i class="fa fa-star fa-2x" data-index="1"></i>
+            <i class="fa fa-star fa-2x" data-index="2"></i>
+            <i class="fa fa-star fa-2x" data-index="3"></i>
+            <i class="fa fa-star fa-2x" data-index="4"></i>
+            </div>
+</section>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+<div class="tabs">
+	<ul class="tab-links">
+		<li class="active"><a href="#tab1">Ingrediënten</a></li>
+		<li><a href="#tab2">Bereidingswijze</a></li>
+		<li><a href="#tab3">Opmerkingen</a></li>
+
+	</ul>
+
+	<div class="tab-content">
+		<div id="tab1" class="tab active">
+        <BR>
+            <h3>Ingredienten</h3>
+            {% for ingr in record.ingredient %}
+            <ul>
+            <li>
+            <h3 style="color=#95b82d";>{{ingr.naam}}</h3>
+            {{ingr.omschrijving}} 
+            <BR>Hoeveelheid: {{ingr.aantal}}
+            
+            </li>
+            </ul>
+            {% endfor %}
+		</div>
+
+		<div id="tab2" class="tab">
+			<BR>
+            <h3>Bereidingswijze</h3>
+            {% for geri in record.gerecht_info_bereidingswijze %}
+            
+            <ul>
+            <li>
+            {{geri.nummeriekveld}}. {{geri.tekstveld}} 
+            </li>
+            </ul>
+            {% endfor %}
+		</div>
+
+		<div id="tab3" class="tab">
+			<BR>
+            <h3>Opmerkingen</h3>
+            {% for geri in record.gerecht_info_opmerking %}
+            <ul>
+            <li>
+            {{geri.user_name}} {{geri.datum}} <BR> {{geri.tekstveld}}
+            </li>
+            </ul>
+            {% endfor %}
+		</div>
+	</div>
+</div>
+</div>
+</div>
+{% endfor %}
 {% endblock %}
