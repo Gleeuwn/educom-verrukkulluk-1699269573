@@ -10,7 +10,7 @@
         <div class="menu-trigger"> <i class="fas fa-bars";></i>
             <div class="dropdown">
                 
-                    <img src="assets/img/verrukkulluk-logo-v2.png"/>
+                    <img src="assets/img/logo-v2.png"/>
                     <h2>
                     <a href=""><span class="menulinks">Mijn favorieten</span></a> 
                     <a href=""><span class="menulinks">Mijn boodschappenlijst</span></a>
@@ -42,15 +42,31 @@
             <div class="col-md-6">
             <section class="content">
             
-            <img src="{{ record.afbeelding }}" style="width: 100%; height: 200px;">
+            <img src="{{ record.afbeelding }}" style="width: 100%; height: 250px;">
             <div class="a">
-            <h2><span style='color: #6e8722'>  {{ record.titel }}</span></h2>
-            <span> {{record.beoordeling}} </span>
-            <span class="star" data-id="{{ record.gerecht.id }}" data-value="1"><i class="far fa-star"></i></span>
-            <span class="star" data-id="{{ record.gerecht.id }}" data-value="2"><i class="far fa-star"></i></span>
-            <span class="star" data-id="{{ record.gerecht.id }}" data-value="3"><i class="far fa-star"></i></span>
-            <span class="star" data-id="{{ record.gerecht.id }}" data-value="4"><i class="far fa-star"></i></span>
-            <span class="star" data-id="{{ record.gerecht.id }}" data-value="5"><i class="far fa-star"></i></span>
+            <h2><span style='color: #6e8722; display: inline'>  {{ record.titel }}</h2>
+            <span style="font-size: 12px;">
+        {% if record.beoordeling %}
+        {% for i in range(1,5) %}
+            {% if record.beoordeling >=  max(0, i-0.25) %}
+                <i style="color: #fdaf08"; class="fas fa-star";></i>
+            {% elseif (record.beoordeling > (i-0.75)) %}
+                <i style="color: #fdaf08"; class="fas fa-star-half-alt";></i>
+            {% else %}
+                <i style="color: gray"; class="far fa-star";></i>
+            {% endif %}
+        {% endfor %}
+        <i><b>{{ record.beoordeling|round(1, 'floor')  }}/5</b></i>
+    {% else %}
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <span style="font-size: 12px"><b></b></span>
+    {% endif %}
+</span></span>
+<br>
             {{record.korte_omschrijving}}
             </div>
             {# sub-loop #}

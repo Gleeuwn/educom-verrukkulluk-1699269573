@@ -9,6 +9,7 @@ class boodschappen{
         $this->connection = $connection;
         $this->ing = new ingredient($connection);
         $this->usr = new user($connection);
+        $this->art = new artikel($connection);
     }
     
     private function selecteerIngredient($gerecht_id) {
@@ -17,6 +18,11 @@ class boodschappen{
     }
     private function selecteerUser($user_id) {
         $data = $this->usr->selecteerUser($user_id);
+        return($data);
+    }
+
+    private function selecteerArtikel($artikel_id) {
+        $data = $this->art->selecteerArtikel($artikel_id);
         return($data);
     }
     
@@ -76,7 +82,7 @@ class boodschappen{
         return($result);
     }
 
-    private function ophalenBoodschappen($user_id){
+    public function ophalenBoodschappen($user_id){
         {
             $sql = "SELECT * 
                     FROM boodschappen 
@@ -85,34 +91,41 @@ class boodschappen{
             $boodschappen = [];
     
             while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
+                $artikel_id = $row['artikel_id'];
+
+                $artikel = $this->selecteerArtikel($artikel_id);
+                $totaal_prijs = $this->berekenTotaalPrijs($user_id);
+
                 $boodschappen[] = [
                     "boodschappen_id" => $row["id"],
                     "boodschappen_user_id" => $row["user_id"],
                     "boodschappen_artikel_id" => $row["artikel_id"],
                     "boodschappen_totaal" => $row["totaal"],
+                    "naam" => $artikel["naam"],
+                    "omschrijving" => $artikel["omschrijving"],
+                    "verpakking" => $artikel["verpakking"],
+                    "eenheid" => $artikel["eenheid"],
+                    "prijs" => $artikel["prijs"],
+                    "totaal_prijs" => $totaal_prijs
                 ];
             }
+
+
             return ($boodschappen);
         }
     }
-  /*  public function berekenTotaalPrijs($user_id)
-    {
-        $sql = "SELECT * FROM boodschappen WHERE user_id = '$user_id'";
-        $result = mysqli_query($this->connection, $sql);
-            
+    public function berekenTotaalPrijs($user_id) {
         $totaal_prijs = 0;
-        
-        // Loop door elke boodschap en voeg de totale prijs toe
+        $sql = "SELECT * FROM boodschappen WHERE user_id = $user_id";
+        $result = mysqli_query($this->connection, $sql);
+    
         while ($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) {
-            $user_id = $row['user_id'];
-            
-
-            $user = $this->selecteerUser($user_id);
-            $totaal_prijs += $row['prijs'];
+            $artikel_id = $row['artikel_id'];
+            $artikel = $this->selecteerArtikel($artikel_id);
+            $totaal_prijs += $artikel["prijs"] * $row["totaal"];
         }
     
         return $totaal_prijs;
     }
-}
-*/
+
 }

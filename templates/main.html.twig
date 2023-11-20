@@ -12,50 +12,61 @@
 
     <script type="text/javascript" language="javascript" src="assets/jquery/jquery-3.5.1.js"></script>
     <script type="text/javascript" language="javascript" src="assets/bootstrap/js/bootstrap.js"></script>
-<script>
-        let gegeven_waardering = -1;
 
-        $(document).ready(function() {
-            resetStarColors();
+    <script>
+    $(document).ready(function() {
+	$heart = 0;
+	reset_heart_color();
 
-            $('.fa-star').on('click', function () {
-                const gegeven_waardering = parseInt($(this).data('index') + 1);
-                const gerecht_id = $(this).closest('.rating').data('id'); 
-                const url = `index.php?gerecht_id=${ gerecht_id }&action=waardering&aantal=${ gegeven_waardering }`;
-				console.log(url);
-                console.log('Clicked on star. gerecht_id:', gerecht_id, 'gegeven_waardering:', gegeven_waardering);
-				$.ajax({
-   					url: url,
-					method: "GET",
-					success: function(result) {}
-				})	
-            })
+	$('.fa-heart').on('click', function () {
+		if ($heart == 1) {
+		    const gerecht_id = $(this).attr('data-id');
+			var url = `index.php?gerecht_id=${ gerecht_id }&action=favoriet&user_id=1&verwijderen=1`
+			console.log(url)
+			$heart = 0;
 
-            $('.fa-star').mouseover(function() {
-                resetStarColors();
+		} 
+        else {
+			$heart = 1;
+			$(".heart").addClass("red")
+            const gerecht_id = $(this).attr('data-id');
+            var url = `index.php?gerecht_id=${ gerecht_id }&action=favoriet&user_id=1`;
+			console.log(url)};
+          
+			$.ajax({
+   				url: url,
+				method: "GET",
+				success: function(result) { 
+				    console.log(result);
+				}
+			})	
+	})
 
-                var huidige_waardering = parseInt($(this).data('index'));
+	$('.fa-heart').mouseover(function() {
+		$('.fa-heart').css('color', 'red');
+		if ($heart == 1) {
+			$('.fa-heart').css('color', 'gray')
+		}
+	})
+	
 
-                for (var i = 0; i <= huidige_waardering; i++)
-                    $('.fa-star:eq(' +i+ ')').css('color', '#fdaf08');
-            });
+	$('.fa-heart').mouseleave(function() {
+		if ($heart == 0) {
+        	reset_heart_color();
+		} else {
+			reset_heart_color_red()
+		}
+	}
+	)})
 
-            $('.fa-star').mouseleave(function() {
+	function reset_heart_color() {
+        $('.fa-heart').css('color', 'gray');
+    }
 
-                if (gegeven_waardering != -1) {
-                    for (var i = 0; i <= gegeven_waardering; i++)
-                        $('.fa-star:eq(' +i+ ')').css('color', '#fdaf08')
-					}
-				
-            })
-            
-        });
-
-        function resetStarColors() {
-            $('.fa-star').css('color', 'gray');
-        }
+	function reset_heart_color_red() {
+		$('.fa-heart').css('color', 'red');
+	}	
     </script>
-
     <script>
     jQuery(document).ready(function() {
 	jQuery('.tabs .tab-links a').on('click', function(e) {
@@ -108,6 +119,13 @@
     <div class="col-md-12">
     <section class="login">
             <h2 style='color: #fff'>Login</h2>
+            <form>
+            <label for="email">Emailadres:</label><br>
+            <input type="text" id="username" name="username"><br>
+            <label for="pwd">Wachtwoord:</label><br>
+            <input type="password" id="pwd" name="pwd"><br>
+            <input type="submit" value="login">
+            </form>
         </section>
     </div>
     </div>

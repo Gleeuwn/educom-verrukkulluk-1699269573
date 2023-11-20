@@ -2,16 +2,16 @@
 
 {% block header %}
 <img src="assets/img/logo-v2.png"/>
-
+{% for record in data %}
 
     <div class="menu">
         <div class="menu-trigger"> <i class="fas fa-bars";></i>
             <div class="dropdown">
                 
-                    <img src="assets/img/verrukkulluk-logo-v2.png"/>
+                    <img src="assets/img/logo-v2.png" style="height: 200px; width: 400px; float: left;"/>
                     <h2>
                     <a href=""><span class="menulinks">Mijn favorieten</span></a> 
-                    <a href=""><span class="menulinks">Mijn boodschappenlijst</span></a>
+                    <a href="http://localhost/educom-verrukkulluk-1699269573/index.php?user_id=1&action=boodschap"><span class="menulinks">Mijn boodschappenlijst</span></a>
                     
                     </h2>
                     
@@ -20,7 +20,7 @@
         </div>
     </div>
     
-
+{% endfor %}
 {% endblock %}
 
 {% block content %}
@@ -29,24 +29,28 @@
 <div class="col-md-12">
 <section class="content">
 <img src="{{ record.afbeelding }}" style="width: 300px; height: 100%; margin-right: 20px; float: left;">
-<h2>{{record.titel}}</h2>
-<h3 style="display: inline"; color="#95b82d";> Keuken: </h3>{{record.keuken_id.omschrijving}} <h3 style="display: inline"; color="#95b82d";>Type: </h3> {{record.type_id.omschrijving}}
-<BR>{{record.lange_omschrijving}}
 <BR>
-<span class="b">
-            <i class="fas fa-user-friends" style="color: #dc3439;"></i> 4 
-            <i class="fas fa-euro-sign" style="color: #dc3439;"></i> {{record.prijs}}
-            <i class="fas fa-fire" style="color: #dc3439;"></i> {{record.calories}} 
-            </span>
-            <i class="far fa-heart"></i>
-            <BR>
-            <div class="rating" data-id="{{ record.id }}">
+<span class="b";>
+    <i class="fas fa-user-friends" style="color: #dc3439;"></i> 4 
+    <i class="fas fa-euro-sign" style="color: #dc3439;"></i> {{record.prijs}}
+    <i class="fas fa-fire" style="color: #dc3439;"></i> {{record.calories}} 
+</span>
+<BR>
+<h2 style="display: inline";><span style="color:#95b82d";>{{record.titel}}</span></h2>
+            <span class="rating" data-id="{{ record.id }}" style="float: right; padding-right: 20px;">
             <i class="fa fa-star fa-2x" data-index="0"></i>
             <i class="fa fa-star fa-2x" data-index="1"></i>
             <i class="fa fa-star fa-2x" data-index="2"></i>
             <i class="fa fa-star fa-2x" data-index="3"></i>
             <i class="fa fa-star fa-2x" data-index="4"></i>
-            </div>
+            </span>
+
+<BR><h3 style= "display: inline";><span style="color:#95b82d;"> Keuken: </span></h3>{{record.keuken_id.omschrijving}} <h3 style= "display: inline";><span style="color:#95b82d;" class="b"> Type: </span></h3> {{record.type_id.omschrijving}}
+<BR>{{record.lange_omschrijving}}
+<BR>
+<h3><a href="http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id={{record.id}}&user_id=1&action=oplijst"><ul class="buttoncontainer">Op Lijst</ul></a></h3>
+<i class="far fa-heart fa-2x" data-id="{{ record.id }}" style="padding-right: 20px; float: right; margin-top: 5px";></i>
+<BR>
 </section>
 </div>
 </div>
@@ -64,11 +68,11 @@
 	<div class="tab-content">
 		<div id="tab1" class="tab active">
         <BR>
-            <h3>Ingredienten</h3>
+            <h3><span style='color: #6e8722'>Ingredienten</span></h3>
             {% for ingr in record.ingredient %}
             <ul>
             <li>
-            <h3 style="color=#95b82d";>{{ingr.naam}}</h3>
+            <h3><span style='color: #6e8722'> {{ingr.naam}}</span></h3>
             {{ingr.omschrijving}} 
             <BR>Hoeveelheid: {{ingr.aantal}}
             
@@ -106,4 +110,47 @@
 </div>
 </div>
 {% endfor %}
+<script>
+        let gegeven_waardering = -1;
+
+        $(document).ready(function() {
+            resetStarColors();
+
+            $('.fa-star').on('click', function () {
+                const gegeven_waardering = parseInt($(this).data('index') + 1);
+                const gerecht_id = $(this).closest('.rating').data('id'); 
+                const url = `index.php?gerecht_id=${ gerecht_id }&action=waardering&aantal=${ gegeven_waardering }`;
+				console.log(url);
+                console.log('Clicked on star. gerecht_id:', gerecht_id, 'gegeven_waardering:', gegeven_waardering);
+				$.ajax({
+   					url: url,
+					method: "GET",
+					success: function(result) {}
+				})	
+            })
+
+            $('.fa-star').mouseover(function() {
+                resetStarColors();
+
+                var huidige_waardering = parseInt($(this).data('index'));
+
+                for (var i = 0; i <= huidige_waardering; i++)
+                    $('.fa-star:eq(' +i+ ')').css('color', '#fdaf08');
+            });
+
+            $('.fa-star').mouseleave(function() {
+
+                if (gegeven_waardering != -1) {
+                    for (var i = 0; i <= gegeven_waardering; i++)
+                        $('.fa-star:eq(' +i+ ')').css('color', '#fdaf08')
+					}
+				
+            })
+            
+        });
+
+        function resetStarColors() {
+            $('.fa-star').css('color', 'gray');
+        }
+    </script>
 {% endblock %}

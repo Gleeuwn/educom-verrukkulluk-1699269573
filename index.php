@@ -26,7 +26,7 @@ $db = new database();
 // $art = new artikel($db->getConnection());
 // $usr = new user($db->getConnection());
 // $keu = new keuken_type($db->getConnection());
-// $ing = new ingredient($db->getConnection());
+$ing = new ingredient($db->getConnection());
 $gei = new gerecht_info($db->getConnection());
 $ger = new gerecht($db->getConnection());
 $boo = new boodschappen($db->getConnection());
@@ -35,12 +35,13 @@ $boo = new boodschappen($db->getConnection());
 
 /*
 URL:
-http://localhost/index.php?gerecht_id=4&action=detail
+http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id=1&action=detail
 */
 
 $gerecht_id = isset($_GET["gerecht_id"]) ? $_GET["gerecht_id"] : null;
 $action = isset($_GET["action"]) ? $_GET["action"] : "homepage";
 $waardering = 0;
+$favoriet = 0;
 
 // $action = "homepage";
 // if (isset($_GET["action"])) {
@@ -64,6 +65,18 @@ switch($action) {
             break;
         }
 
+        case "boodschap": {
+            $user_id = $_GET["user_id"];
+            $data = $boo->ophalenBoodschappen($user_id);
+            if (isset($_GET["gerecht_id"])) {
+                $gerecht_id = $_GET["gerecht_id"];
+                $boo->boodschappenToevoegen($gerecht_id, $user_id);
+                };
+            $template = 'boodschap.html.twig';
+            $title = "boodschappenlijst";
+            break;
+        }
+
         case "waardering": {
             $aantal = $_GET["aantal"];
             $gerecht_id = $_GET["gerecht_id"];
@@ -74,7 +87,24 @@ switch($action) {
             $waardering = 1;
             die();
             break;
-        };
+        }
+        
+        case "favoriet": {
+            $gerecht_id = $_GET["gerecht_id"];
+            $user_id = $_GET["user_id"];
+            header('Content-Type: application/json; charset=utf-8');
+            if (isset($_GET["verwijderen"])) {
+                $data = $gei->deleteFavorite($gerecht_id, $user_id);
+            } else {
+                $data = $gei->addFavorite($gerecht_id, $user_id);
+            }
+            $json = json_encode($data);
+            echo $json;
+            die();
+            break;
+        }
+
+        
 
         /// etc
 

@@ -93,7 +93,7 @@ a:link, a:visited {
 }
 .buttoncontainer{
     width: 125px;
-    padding: 10px;
+    padding: 1px;
     color: #FFF;
     background-color: var(--lighter-red);
     margin: 5px;
@@ -103,6 +103,8 @@ a:link, a:visited {
 }
 .menulinks{
     color: var(--lighter-red);
+    padding: 100px;
+    
 }
 
 .menu {
@@ -118,7 +120,7 @@ a:link, a:visited {
     height: 40px;
     cursor: pointer;
     transition: all 0.4s ease;
-    z-index: 5000 !important;
+   
     border-radius: 5%;
     text-align: center;
 }
@@ -128,7 +130,7 @@ a:link, a:visited {
     top: -400px;
     left: 0;
     right: 0;
-    height: 100px;
+    height: 300px;
     background-color: #fff;
     transition: all 0.4s ease;
     padding: 40px;
