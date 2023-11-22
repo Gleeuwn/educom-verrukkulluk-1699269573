@@ -1,36 +1,14 @@
 {% extends "main.html.twig" %}
 
-{% block header %}
-<img src="assets/img/logo-v2.png"/>
-
-
-    <div class="menu">
-        <div class="menu-trigger"> <i class="fas fa-bars";></i>
-            <div class="dropdown">
-                
-                    <img src="assets/img/logo-v2.png" style="height: 200px; width: 400px; float: left;"/>
-                    <h2>
-                    <a href=""><span class="menulinks">Mijn favorieten</span></a> 
-                    <a href="http://localhost/educom-verrukkulluk-1699269573/index.php?user_id=1&action=boodschap"><span class="menulinks">Mijn boodschappenlijst</span></a>
-                    
-                    </h2>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-    
-
-{% endblock %}
 
 {% block content %}
 <div class="row">
 <div class="col-md-12">
 <section class="content">
-<h2> boodschappenlijst </h2>
+<div class="a"><h2> boodschappenlijst </h2></div>
 {% for record in data %}
 <ul>
-<li><h2><span color="#95b82d";>{{record.naam}}</span></h2>
+<li><h2>{{record.naam}}</h2>
 {{record.omschrijving}} 
 <form style="margin: 0; padding: 0"><div class="b" style="padding-right: 30px;"><input type="number" id="quantity"name="quantity" value="{{record.boodschappen_totaal}}" style="width: 50px; display: inline;"></form> *
 <i class="fas fa-euro-sign" style="color: #dc3439;"></i> {{record.prijs}} 

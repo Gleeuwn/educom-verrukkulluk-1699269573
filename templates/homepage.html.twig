@@ -2,30 +2,6 @@
 {% extends "main.html.twig" %}
 
 
-{% block header %}
-<img src="assets/img/logo-v2.png"/>
-
-
-    <div class="menu">
-        <div class="menu-trigger"> <i class="fas fa-bars";></i>
-            <div class="dropdown">
-                
-                    <img src="assets/img/logo-v2.png"/>
-                    <h2>
-                    <a href=""><span class="menulinks">Mijn favorieten</span></a> 
-                    <a href=""><span class="menulinks">Mijn boodschappenlijst</span></a>
-                    
-                    </h2>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-    
-
-{% endblock %}
-
-
 {# nu de block content op in de main pagina vullen #}
 {% block content %}
     {# Dit is commentaar #}
@@ -33,8 +9,25 @@
 {# Loop #} 
 
 
-    {% for record in data %}
+    
+        {% set zoekterm = app.request.query.get('q', '') %}
+        De waarde van zoekterm is {{zoekterm}}
+        {% if zoekterm is not empty %}
+        <h2>Zoekresultaten voor: {{ zoekterm }}</h2>
+         <ul>
+            {% for record in data %}
+            {# Toon alleen gerechten waarvan de titel de zoekterm bevat #}
+            {% if zoekterm in record.titel %}
+                <li>{{ record.titel }}</li>
+            {% endif %}
+            {% else %}
+            <p>Geen zoekopdracht ingevoerd. {{ record.titel}}</p> 
+        {% endfor %}
+            </ul>
         
+        {% endif %}
+{% for record in data %}
+
         {%  if record.id is odd %}
             <div class="row">
         {%  endif  %}
@@ -44,7 +37,7 @@
             
             <img src="{{ record.afbeelding }}" style="width: 100%; height: 250px;">
             <div class="a">
-            <h2><span style='color: #6e8722; display: inline'>  {{ record.titel }}</h2>
+            <h2 style="display: inline; color: #6e8722";> {{ record.titel }}</h2>
             <span style="font-size: 12px;">
         {% if record.beoordeling %}
         {% for i in range(1,5) %}
@@ -62,10 +55,9 @@
         <i class="fas fa-star"></i>
         <i class="fas fa-star"></i>
         <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <span style="font-size: 12px"><b></b></span>
+        <i class="fas fa-star"></i>       
     {% endif %}
-</span></span>
+</span>
 <br>
             {{record.korte_omschrijving}}
             </div>

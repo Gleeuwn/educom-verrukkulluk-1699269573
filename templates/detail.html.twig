@@ -1,28 +1,5 @@
 {% extends "main.html.twig" %}
 
-{% block header %}
-<img src="assets/img/logo-v2.png"/>
-{% for record in data %}
-
-    <div class="menu">
-        <div class="menu-trigger"> <i class="fas fa-bars";></i>
-            <div class="dropdown">
-                
-                    <img src="assets/img/logo-v2.png" style="height: 200px; width: 400px; float: left;"/>
-                    <h2>
-                    <a href=""><span class="menulinks">Mijn favorieten</span></a> 
-                    <a href="http://localhost/educom-verrukkulluk-1699269573/index.php?user_id=1&action=boodschap"><span class="menulinks">Mijn boodschappenlijst</span></a>
-                    
-                    </h2>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-    
-{% endfor %}
-{% endblock %}
-
 {% block content %}
 {% for record in data %}
 <div class="row">
@@ -48,7 +25,7 @@
 <BR><h3 style= "display: inline";><span style="color:#95b82d;"> Keuken: </span></h3>{{record.keuken_id.omschrijving}} <h3 style= "display: inline";><span style="color:#95b82d;" class="b"> Type: </span></h3> {{record.type_id.omschrijving}}
 <BR>{{record.lange_omschrijving}}
 <BR>
-<h3><a href="http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id={{record.id}}&user_id=1&action=oplijst"><ul class="buttoncontainer">Op Lijst</ul></a></h3>
+<h3><a href="http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id={{record.id}}&user_id=1&action=boodschap"><ul class="buttoncontainer">Op Lijst</ul></a></h3>
 <i class="far fa-heart fa-2x" data-id="{{ record.id }}" style="padding-right: 20px; float: right; margin-top: 5px";></i>
 <BR>
 </section>

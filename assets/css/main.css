@@ -214,3 +214,16 @@ li.active a, li.active a:hover {
 .tab.active {
 	display:block;
 }
+
+.zoekbalk {
+    position: fixed;
+    top: 20px;
+    right: 100px;
+}
+
+.zoekbalk i{ 
+    position: absolute; 
+    left: 18px; 
+    top: 8px; 
+    color: var(--darker-orange); 
+} 
