@@ -1,6 +1,6 @@
 {% extends "main.html.twig" %}
 {% block content %}
-    <script>
+    {#<script>
         document.addEventListener("DOMContentLoaded", function() {
             var urlParams = new URLSearchParams(window.location.search);
             var zoekterm = urlParams.get('q') || '';
@@ -15,18 +15,26 @@
                 console.error('Element with id "zoekterm" not found.');
             }
         });
-    </script>
+    </script>#}
 
-    <h2>Zoekresultaten voor: <span id="zoekterm" data-zoekterm="{{ zoekterm }}"></span></h2>
+<h2>Zoekresultaten voor: {{ data.zoekterm }}</h2>
 
-    {% for record in data %}
-        {# Toon alleen gerechten waarvan de titel de zoekterm bevat #}
-        {% if zoekterm in record.titel %}
-            <li>{{ record.titel }}</li>
-        {% endif %}
-    {% endfor %}
-
-    {% if zoekterm is empty %}
-        <p>Geen zoekopdracht ingevoerd.</p>
+{% for record in data.gerechten %}
+    {# Toon alleen gerechten waarvan de titel de zoekterm bevat #}
+    {% if record.titel matches '/\\b.*' ~ data.zoekterm|replace({' ': '.*'}) ~ '.*\\b/i' %}
+        <a href="http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id={{record.id}}&action=detail"
+        <li><h2>{{ record.titel }}</h2></li></a>
+        <li>{{record.korte_omschrijving}}</li>
+        <span class="b">
+            <i class="fas fa-user-friends" style="color: #dc3439;"></i> 4 
+            <i class="fas fa-euro-sign" style="color: #dc3439;"></i> {{record.prijs}}
+            <i class="fas fa-fire" style="color: #dc3439;"></i> {{record.calories}} 
+            Datum toegevoegd: {{record.datum_toegevoegd}}
+            </span>
     {% endif %}
+{% endfor %}
+
+{% if data.zoekterm is empty %}
+    <p>Geen zoekopdracht ingevoerd.</p>
+{% endif %}
 {% endblock %}

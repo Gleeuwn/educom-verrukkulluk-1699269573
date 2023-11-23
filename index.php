@@ -40,8 +40,7 @@ http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id=1&action=de
 
 $gerecht_id = isset($_GET["gerecht_id"]) ? $_GET["gerecht_id"] : null;
 $action = isset($_GET["action"]) ? $_GET["action"] : "homepage";
-$zoekterm = isset($_GET['q']) ? $_GET['q'] : '';
-$waardering = 0;
+$zoekterm = $_GET['q'] ?? '';
 $favoriet = 0;
 
 // $action = "homepage";
@@ -106,11 +105,13 @@ switch($action) {
         }
 
         case "zoekpagina": {
-            $data = $ger->ophalenGerecht();
+            $data = [
+                "zoekterm" => $zoekterm,
+                "gerechten" => $ger->ophalenGerecht(),
+            ];
             $template = 'zoekpagina.html.twig';
             $title = "zoekpagina";
             break;
-
         }
 
         
