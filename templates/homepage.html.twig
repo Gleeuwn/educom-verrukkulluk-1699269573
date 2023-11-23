@@ -8,24 +8,6 @@
 
 {# Loop #} 
 
-
-    
-        {% set zoekterm = app.request.query.get('q', '') %}
-        De waarde van zoekterm is {{zoekterm}}
-        {% if zoekterm is not empty %}
-        <h2>Zoekresultaten voor: {{ zoekterm }}</h2>
-         <ul>
-            {% for record in data %}
-            {# Toon alleen gerechten waarvan de titel de zoekterm bevat #}
-            {% if zoekterm in record.titel %}
-                <li>{{ record.titel }}</li>
-            {% endif %}
-            {% else %}
-            <p>Geen zoekopdracht ingevoerd. {{ record.titel}}</p> 
-        {% endfor %}
-            </ul>
-        
-        {% endif %}
 {% for record in data %}
 
         {%  if record.id is odd %}

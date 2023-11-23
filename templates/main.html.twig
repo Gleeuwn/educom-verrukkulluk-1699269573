@@ -14,49 +14,49 @@
     <script type="text/javascript" language="javascript" src="assets/bootstrap/js/bootstrap.js"></script>
 
     <script>
-    $(document).ready(function() {
-	$heart = 0;
-	reset_heart_color();
+        $(document).ready(function() {
+	        $heart = 0;
+	        reset_heart_color();
 
-	$('.fa-heart').on('click', function () {
-		if ($heart == 1) {
-		    const gerecht_id = $(this).attr('data-id');
-			var url = `index.php?gerecht_id=${ gerecht_id }&action=favoriet&user_id=1&verwijderen=1`
-			console.log(url)
-			$heart = 0;
+	        $('.fa-heart').on('click', function () {
+		        if ($heart == 1) {
+		            const gerecht_id = $(this).attr('data-id');
+			        var url = `index.php?gerecht_id=${ gerecht_id }&action=favoriet&user_id=1&verwijderen=1`
+			        console.log(url)
+			        $heart = 0;
 
-		} 
-        else {
-			$heart = 1;
-			$(".heart").addClass("red")
-            const gerecht_id = $(this).attr('data-id');
-            var url = `index.php?gerecht_id=${ gerecht_id }&action=favoriet&user_id=1`;
-			console.log(url)};
+		        } 
+                else {
+			        $heart = 1;
+			        $(".heart").addClass("red")
+                    const gerecht_id = $(this).attr('data-id');
+                    var url = `index.php?gerecht_id=${ gerecht_id }&action=favoriet&user_id=1`;
+			        console.log(url)};
           
-			$.ajax({
-   				url: url,
-				method: "GET",
-				success: function(result) { 
-				    console.log(result);
-				}
-			})	
-	})
+			    $.ajax({
+   				    url: url,
+				    method: "GET",
+				    success: function(result) { 
+				        console.log(result);
+				    }
+			    })	
+	    })
 
-	$('.fa-heart').mouseover(function() {
-		$('.fa-heart').css('color', 'red');
-		if ($heart == 1) {
-			$('.fa-heart').css('color', 'gray')
-		}
-	})
+	        $('.fa-heart').mouseover(function() {
+		        $('.fa-heart').css('color', 'red');
+		        if ($heart == 1) {
+			        $('.fa-heart').css('color', 'gray')
+		        }
+	        })
 	
 
-	$('.fa-heart').mouseleave(function() {
-		if ($heart == 0) {
-        	reset_heart_color();
-		} else {
-			reset_heart_color_red()
-		}
-	}
+	        $('.fa-heart').mouseleave(function() {
+		        if ($heart == 0) {
+        	        reset_heart_color();
+		        } else {
+			        reset_heart_color_red()
+		        }   
+	        }
 	)})
 
 	function reset_heart_color() {
@@ -67,49 +67,42 @@
 		$('.fa-heart').css('color', 'red');
 	}	
     </script>
+
     <script>
     jQuery(document).ready(function() {
-	jQuery('.tabs .tab-links a').on('click', function(e) {
-		var currentAttrValue = jQuery(this).attr('href');
+	    jQuery('.tabs .tab-links a').on('click', function(e) {
+		    var currentAttrValue = jQuery(this).attr('href');
 
-		jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
-		jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
+		    jQuery('.tabs ' + currentAttrValue).show().siblings().hide();
+		    jQuery(this).parent('li').addClass('active').siblings().removeClass('active');
 
-		e.preventDefault();
-	});
+		    e.preventDefault();
+	    });
     });
     </script>
-    <script>
-    function showResult(str) {
-    if (event.keyCode === 13) {
-    window.location.href = 'http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id&action=zoekpagina&q=' + encodeURIComponent(str);
-        return false;
-    }
-    if (str.length==0) {
-    document.getElementById("livesearch").innerHTML="";
-    document.getElementById("livesearch").style.border="0px";
-    return;
-     }
-    var xmlhttp=new XMLHttpRequest();
-    xmlhttp.onreadystatechange=function() {
-    if (this.readyState==4 && this.status==200) {
-      document.getElementById("livesearch").innerHTML=this.responseText;
-      document.getElementById("livesearch").style.border="1px solid #A5ACB2";
-    }
-    }
-    xmlhttp.open("GET","lib/livesearch.php?q="+str,true);
-    xmlhttp.send();
-    }
-{#<script>
-    $(document).ready(function() {
-        $("#zoeken").submit(function(){
-            var input = $(this).val();
-            alert (input);
-        })
-});
-</script>#}
 
-</script>
+    <script>
+        function showResult(str) {
+            if (event.keyCode === 13) {
+                window.location.href = 'http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id&action=zoekpagina&q=' + encodeURIComponent(str);
+                return false;
+            }
+            if (str.length==0) {
+                document.getElementById("livesearch").innerHTML="";
+                document.getElementById("livesearch").style.border="0px";
+            return;
+            }
+            var xmlhttp=new XMLHttpRequest();
+            xmlhttp.onreadystatechange=function() {
+                if (this.readyState==4 && this.status==200) {
+                    document.getElementById("livesearch").innerHTML=this.responseText;
+                    document.getElementById("livesearch").style.border="1px solid #A5ACB2";
+                }
+            }
+            xmlhttp.open("GET","lib/livesearch.php?q="+str,true);
+            xmlhttp.send();
+        }
+    </script>
 
 
     <style>
@@ -191,14 +184,12 @@
         </section>
     </div>
     </div>
-
         </div>
         <div class="col-md-9">
             {%  block content %}
             {%  endblock %}
         </div>
     </div>
-
 
 {#footer#}
 <footer class="footer">
@@ -219,8 +210,5 @@
         </div>
     </div>
 </footer>
-
-
 </div>
-
 </body>

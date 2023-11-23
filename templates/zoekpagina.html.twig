@@ -1,41 +1,12 @@
 {% extends "main.html.twig" %}
 {% block content %}
-    <h2>Zoekresultaten voor: <span id="zoekterm" data-zoekterm="{{zoekterm}}"></span></h2>
     <script>
-    console.log('Zoekterm in Twig:', zoekterm);
-   if (data) {
-    console.log('Titels in data:', data.map(record => record.titel));
-} else {
-    console.log('Geen data beschikbaar');
-}
-</script>
-{% for record in data %}
-{{record.titel}}
-{% endfor %}
-    <ul>
-        {% for record in data %}
-            {# Toon alleen gerechten waarvan de titel de zoekterm bevat #}
-            {% if zoekterm in record.titel %}
-                <li>{{ record.titel }}</li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-
-    {% if zoekterm is empty %}
-        <p>Geen zoekopdracht ingevoerd.</p>
-    {% endif %}
-
-    <script>
-        // Wacht tot het document volledig is geladen
         document.addEventListener("DOMContentLoaded", function() {
-            // In JavaScript
             var urlParams = new URLSearchParams(window.location.search);
             var zoekterm = urlParams.get('q') || '';
 
-            // Hier kun je 'zoekterm' gebruiken zoals je dat wilt in je HTML of door te communiceren met de server
             var zoektermElement = document.getElementById("zoekterm");
-            
-            // Voeg deze regel toe om de zoekterm in de console weer te geven
+
             console.log('Zoekterm:', zoekterm);
 
             if (zoektermElement) {
@@ -43,10 +14,19 @@
             } else {
                 console.error('Element with id "zoekterm" not found.');
             }
-
-            // Voer een AJAX-aanroep uit om zoekresultaten van de server op te halen en weer te geven
-            // Hier zou je jouw eigen implementatie moeten toevoegen
-            // Bijvoorbeeld: performSearch(zoekterm);
         });
     </script>
+
+    <h2>Zoekresultaten voor: <span id="zoekterm" data-zoekterm="{{ zoekterm }}"></span></h2>
+
+    {% for record in data %}
+        {# Toon alleen gerechten waarvan de titel de zoekterm bevat #}
+        {% if zoekterm in record.titel %}
+            <li>{{ record.titel }}</li>
+        {% endif %}
+    {% endfor %}
+
+    {% if zoekterm is empty %}
+        <p>Geen zoekopdracht ingevoerd.</p>
+    {% endif %}
 {% endblock %}
