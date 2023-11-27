@@ -1,40 +1,41 @@
 {% extends "main.html.twig" %}
 {% block content %}
-    {#<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var urlParams = new URLSearchParams(window.location.search);
-            var zoekterm = urlParams.get('q') || '';
-
-            var zoektermElement = document.getElementById("zoekterm");
-
-            console.log('Zoekterm:', zoekterm);
-
-            if (zoektermElement) {
-                zoektermElement.textContent = zoekterm;
-            } else {
-                console.error('Element with id "zoekterm" not found.');
-            }
-        });
-    </script>#}
 
 <h2>Zoekresultaten voor: {{ data.zoekterm }}</h2>
+{% if data.zoekterm is empty %}
+    <p>Geen zoekopdracht ingevoerd.</p>
+
+{% else %}
+{% set filteredGerechten = [] %}
+
 
 {% for record in data.gerechten %}
-    {# Toon alleen gerechten waarvan de titel de zoekterm bevat #}
+
     {% if record.titel matches '/\\b.*' ~ data.zoekterm|replace({' ': '.*'}) ~ '.*\\b/i' %}
-        <a href="http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id={{record.id}}&action=detail"
-        <li><h2>{{ record.titel }}</h2></li></a>
-        <li>{{record.korte_omschrijving}}</li>
-        <span class="b">
-            <i class="fas fa-user-friends" style="color: #dc3439;"></i> 4 
-            <i class="fas fa-euro-sign" style="color: #dc3439;"></i> {{record.prijs}}
-            <i class="fas fa-fire" style="color: #dc3439;"></i> {{record.calories}} 
-            Datum toegevoegd: {{record.datum_toegevoegd}}
-            </span>
+        {% set filteredGerechten = filteredGerechten|merge([record]) %}
     {% endif %}
 {% endfor %}
 
-{% if data.zoekterm is empty %}
-    <p>Geen zoekopdracht ingevoerd.</p>
+{% set sortedGerechten = filteredGerechten|sort((a, b) => b.datum_toegevoegd <=> a.datum_toegevoegd) %}
+
+{% for record in sortedGerechten %}
+<div class: row md 12>
+<section class="contentzoek">
+    <a href="http://localhost/educom-verrukkulluk-1699269573/index.php?gerecht_id={{record.id}}&action=detail">
+        <h2 class="zoeklinks";>{{ record.titel }}</h2>
+    </a>
+    <li>{{record.korte_omschrijving}}</li>
+    <span class="b">
+        <i class="fas fa-user-friends" style="color: #dc3439;"></i> 4 
+        <i class="fas fa-euro-sign" style="color: #dc3439;"></i> {{record.prijs}}
+        <i class="fas fa-fire" style="color: #dc3439;"></i> {{record.calories}} 
+        Datum toegevoegd: {{record.datum_toegevoegd}}
+    </span>
+    </section>
+    </div>
+    
+{% endfor %}
+
 {% endif %}
+
 {% endblock %}

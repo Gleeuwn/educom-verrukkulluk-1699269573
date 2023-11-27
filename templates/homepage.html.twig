@@ -1,12 +1,6 @@
-{# Opnemen van de "Main" file #}
 {% extends "main.html.twig" %}
 
-
-{# nu de block content op in de main pagina vullen #}
 {% block content %}
-    {# Dit is commentaar #}
-
-{# Loop #} 
 
 {% for record in data %}
 
@@ -43,7 +37,6 @@
 <br>
             {{record.korte_omschrijving}}
             </div>
-            {# sub-loop #}
             <ul>
                 {% for ingr in record.ingredient %}
                 {% endfor %}
@@ -65,12 +58,5 @@
             {%  endif  %} 
             
     {% endfor %}
-
-
-    
-     {# Dump #}
-       {#<pre>
-        {{ dump(data) }}
-       </pre>#}
 
 {% endblock %}
